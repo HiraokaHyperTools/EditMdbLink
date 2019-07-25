@@ -5,9 +5,16 @@
 ; prompts the user asking them where to install, and drops a copy of example1.nsi
 ; there. 
 
+Unicode true
+
 !define APP "EditMdbLink"
-!define VER "0.1"
-!define APV "0_1"
+
+!system 'DefineAsmVer.exe ".\Release\${APP}.exe" "!define VER ""[SVER]"" " > Tmpver.nsh'
+!include "Tmpver.nsh"
+!searchreplace APV ${VER} "." "_"
+
+!system 'MySign "Release\${APP}.exe"'
+!finalize 'MySign "%1"'
 
 ;--------------------------------
 
@@ -25,6 +32,8 @@ RequestExecutionLevel user
 
 AutoCloseWindow true
 
+XPStyle on
+
 ;--------------------------------
 
 ; Pages
@@ -33,7 +42,7 @@ Page license
 Page directory
 Page instfiles
 
-LicenseData NewBSD.rtf
+LicenseData "NewBSD.rtf"
 
 ;--------------------------------
 
